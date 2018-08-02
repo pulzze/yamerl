@@ -810,8 +810,8 @@ determine_token_type([$' | _] = Chars, Line, Col, Delta, Parser) ->
     parse_flow_scalar(Chars, Line, Col, Delta, Parser, single_quoted);
 
 %% Double-quoted flow scalar.
-determine_token_type([$" | _] = Chars, Line, Col, Delta, Parser) ->
-    parse_flow_scalar(Chars, Line, Col, Delta, Parser, double_quoted);
+% determine_token_type([$" | _] = Chars, Line, Col, Delta, Parser) ->
+    % parse_flow_scalar(Chars, Line, Col, Delta, Parser, double_quoted);
 
 %% Reserved indicators.
 %% We add a warning and parse it as a plain scalar.
@@ -2757,7 +2757,7 @@ parse_flow_scalar([C | Rest] = Chars, Line, Col, Delta, Parser, Style) ->
     Parser2 = ?ALLOW_IMPL_KEY(Parser1, false),
     {Rest1, {Col1, Delta1}} = case C of
         $' -> {Rest, ?NEXT_COL(Col, Delta, 1)};
-        $" -> {Rest, ?NEXT_COL(Col, Delta, 1)};
+        % $" -> {Rest, ?NEXT_COL(Col, Delta, 1)};
         _  -> {Chars, {Col, Delta}}
     end,
     do_parse_flow_scalar(Rest1, Line, Col1, Delta1, Parser2, Ctx).
@@ -2912,7 +2912,7 @@ do_parse_flow_scalar([C | Rest], Line, Col, Delta, Parser,
 
 do_parse_flow_scalar([C | Rest], Line, Col, Delta, Parser,
   #flow_scalar_ctx{style = Style} = Ctx) when
-  (Style == double_quoted andalso C == $") orelse
+  % (Style == double_quoted andalso C == $") orelse
   (Style == single_quoted andalso C == $') ->
     %% Found the end of this flow scalar. Next step: find the next
     %% token.
@@ -3444,7 +3444,7 @@ unescape_char($_)  -> 16#A0;   %% \_ = Unicode non-breaking space [56]
 unescape_char($L)  -> 16#2028; %% \L = Unicode line sep.          [57]
 unescape_char($P)  -> 16#2029; %% \P = Unicode paragraph sep.     [58]
 unescape_char($\s) -> $\s;     %% \  = SPC                        [51]
-unescape_char($")  -> $";      %% \" = "                          [52]
+% unescape_char($")  -> $";      %% \" = "                          [52]
 unescape_char($/)  -> $/;      %% \/ = /                          [53]
 unescape_char($\\) -> $\\;     %% \\ = \                          [54]
 unescape_char(_)   -> undefined.
